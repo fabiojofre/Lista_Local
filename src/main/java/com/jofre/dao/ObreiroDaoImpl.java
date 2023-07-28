@@ -44,7 +44,7 @@ public class ObreiroDaoImpl extends AbstractDao<Obreiro, Integer> implements Obr
 		
 		List<Obreiro>obreiros = null;
 		
-		obreiros = createQuery("select p from Obreiro p where p.bloqueado = false");
+		obreiros = createQuery("select p from Obreiro p where p.bloqueado = false or p.bloqueado = null order by p.id");
 
 		List<Obreiro>disponiveis = new ArrayList<>();
 		
@@ -64,10 +64,10 @@ public class ObreiroDaoImpl extends AbstractDao<Obreiro, Integer> implements Obr
 				if(ob.geteSexta()) 	diasLivres +="6";
 				if(ob.geteSabado())	diasLivres +="7";
 				
-				if(diasLivres.contains(Integer.toString(diaDaSemana))&&
-						((ob.getTrabalhoIntermitente()==false||
-								ob.getDataUltimaEscala()==null)||
-									ob.getEscalaIntermitente()==null)) {
+				if((diasLivres.contains(Integer.toString(diaDaSemana))&&
+						!(ob.getTrabalhoIntermitente()==true &&
+								ob.getDataUltimaEscala()!=null&&
+									ob.getEscalaIntermitente()!=null))) {
 					System.out.println(ob.toString());
 					System.out.println("------------------------------");
 					System.out.println(diasLivres.contains(Integer.toString(diaDaSemana)));
@@ -75,14 +75,15 @@ public class ObreiroDaoImpl extends AbstractDao<Obreiro, Integer> implements Obr
 					System.out.println(diasLivres);
 					disponiveis.add(ob);
 					
-				}else if(diasLivres.contains(Integer.toString(diaDaSemana))&& 
-							ob.getTrabalhoIntermitente()&&
-								ob.getDataUltimaEscala()!=null &&
-									ob.getEscalaIntermitente()!=null &&
-										!((c.get(Calendar.DAY_OF_YEAR) - cOb.get(Calendar.DAY_OF_YEAR)) % (ob.getEscalaIntermitente()+1)==0)){
+				}
+				if((diasLivres.contains(Integer.toString(diaDaSemana))&& 
+						(ob.getTrabalhoIntermitente()==true && ob.getDataUltimaEscala()!=null && ob.getEscalaIntermitente()!=null)) &&
+										((c.get(Calendar.DAY_OF_YEAR) - cOb.get(Calendar.DAY_OF_YEAR)-1) % (ob.getEscalaIntermitente()+1))==0){
 					System.out.println(ob.toString());
 					System.out.println("*******************************"+(c.get(Calendar.DAY_OF_YEAR)));
 					disponiveis.add(ob);
+					System.out.println("Dias Teste: "+ (c.get(Calendar.DAY_OF_YEAR) - cOb.get(Calendar.DAY_OF_YEAR)));
+					System.out.println("Dias disponiveis: "+(ob.getEscalaIntermitente()+1));
 				}
 		}
 		System.out.println(disponiveis.size()+" - "+c.getTime());

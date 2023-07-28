@@ -26,6 +26,9 @@
 	                
 	                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseData"
 	                        aria-controls="collapseData">Data</button>
+	                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTipo"
+	                        aria-controls="collapseTipo">Tipo Obreiro
+	                </button>       
 	            </p>
 	           
 				<div class="row">
@@ -38,6 +41,26 @@
 	                                       th:name="data" />
 	                                       <button class="btn btn-outline-success my-2 my-sm-0">Search</button>
 	                                 </form>
+	                        </nav>
+	
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col">
+	                    <div class="collapse" id="collapseTipo">
+	
+	                        <nav class="navbar navbar-light bg-light">
+	                            <form class="form-inline" method="GET" th:action="@{/funcionarios/buscar/tipo}">
+	                                <select class="form-control mr-sm-2" th:name="tipoObreiro" aria-label="Search">
+	                                    <option value="">Tipo Obreiro</option>
+	                                    <option th:value="1">Cooperador</option>
+	                                    <option th:value="2">Auxiliar Local</option>
+	                                    <option th:value="3">Auxiliar Oficial</option>
+	                                    <option th:value="4">Diácono</option>
+	                                </select>
+	                                <button class="btn btn-outline-success my-2 my-sm-0">Search</button>
+	                            </form>
 	                        </nav>
 	
 	                    </div>
@@ -56,7 +79,7 @@
 	                        <th>Cartão de Membro</th>
 	                        <th>Congregacao</th>
 	                        <th>Whatsapp</th>
-	                        <th>Bloqueado</th>
+	                        <th>Intermitente</th>
 	                        <th>Ação</th>
 	                    </tr>
 	                    </thead>
@@ -67,7 +90,7 @@
 	                        <td th:text="${p.cartaoMembro}"></td>
 	                        <td th:text="${p.congregacao.nome}"></td>
 	                        <td th:text="${p.whatsapp}"></td>
-	                        <td th:text="${p.bloqueado} ? 'OK' "></td>
+	                        <td th:text="${p.trabalhoIntermitente} ? 'OK' "></td>
 	                        <td></td>
 	                        <td colspan="2">
 	                            <a class="btn btn-info btn-sm" th:href="@{/obreiros/editar/{id} (id=${p.id})}" role="button">
